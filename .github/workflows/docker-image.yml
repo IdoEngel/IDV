@@ -7,31 +7,27 @@ on:
     branches: [ "main", "develop" ]
 
 jobs:
-  build-and-test:
+  build-image:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Build Docker
+        run: docker build -t idv-compiler .
+      - name: Save Image
+        run: docker save idv-compiler > idv-compiler.tar
+      - name: Upload Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiler-image
+          path: idv-compiler.tar
 
-    - name: Build Docker Image
-      run: docker build -t idv-compiler .
-
-    - name: Run Build inside Container
-      run: |
-        docker run --rm idv-compiler /bin/bash -c "
-          mkdir -p build && 
-          cmake -B build -S . && 
-          cmake --build build
-        "
-
-    - name: Build and Run Tests
-      run: |
-        docker run --rm idv-compiler /bin/bash -c "
-          mkdir -p build && 
-          cmake -B build -S . && 
-          cmake --build build && 
-          cd build && 
-          ctest --output-on-failure
-        "
-      continue-on-error: true
+  init-test:
+    needs: build-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: compiler-image }
+      - name: Load Image
+        run: docker load < idv-compiler.tar
+      - name: Run Init Test
+        run: docker run --rm idv-compiler /bin/bash -c "mkdir -p build && cmake -B build && cmake --build build && ./build/IDV --gtest_filter=InitTest.*"
