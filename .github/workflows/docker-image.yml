@@ -21,49 +21,53 @@ jobs:
           name: compiler-image
           path: idv-compiler.tar
 
-  init-test:
+  compile-project:
     needs: build-image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download Artifact
+      - name: Download Image
         uses: actions/download-artifact@v4
-        with:
-          name: compiler-image
+        with: { name: compiler-image }
       - name: Load Image
         run: docker load < idv-compiler.tar
-      - name: Run Init Test
+      - name: Compile
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler /bin/bash -c "
-            mkdir -p build && 
-            cmake -B build -S . && 
-            cmake --build build && 
-            ./build/IDV --gtest_filter=InitTest.*
-          "
-  init-test-branch1:
-    needs: init-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
+          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler /bin/bash -c "mkdir -p build && cmake -B build -S . && cmake --build build"
+      - name: Upload Compiled Binary
+        uses: actions/upload-artifact@v4
         with:
-          name: compiler-image
-      - name: Load Image
-        run: docker load < idv-compiler.tar
-      - name: Run Init Test on Branch
-        run: ./build/IDV --gtest_filter=InitTest.*
+          name: compiled-build
+          path: build/
 
-    init-test-branch2:
-    needs: init-test
+  init-test-branch1:
+    needs: compile-project 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download Artifact
+      - name: Download Image and Build
         uses: actions/download-artifact@v4
-        with:
-          name: compiler-image
+        with: { name: compiler-image }
+      - uses: actions/download-artifact@v4
+        with: { name: compiled-build, path: build }
       - name: Load Image
         run: docker load < idv-compiler.tar
-      - name: Run Init Test on Branch
-        run: ./build/IDV --gtest_filter=InitTest.*
+      - name: Run Test
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=InitTest.*
+
+  init-test-branch2:
+    needs: compile-project 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Image and Build
+        uses: actions/download-artifact@v4
+        with: { name: compiler-image }
+      - uses: actions/download-artifact@v4
+        with: { name: compiled-build, path: build }
+      - name: Load Image
+        run: docker load < idv-compiler.tar
+      - name: Run Test
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=InitTest.*
