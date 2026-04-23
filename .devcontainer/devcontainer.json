@@ -6,10 +6,6 @@
     },
     "workspaceFolder": "/app",
     "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
-    "mounts": [
-        "source=${localWorkspaceFolder}/OUTPUT,target=/app/OUTPUT,type=bind",
-        "source=${localWorkspaceFolder}/COPY,target=/app/COPY,type=bind"
-    ],
     "customizations": {
         "vscode": {
             "settings": {
