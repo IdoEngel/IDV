@@ -54,6 +54,7 @@ jobs:
         run: docker load < idv-compiler.tar
       - name: Run Test
         run: |
+          chmod +x build/IDV
           docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=InitTest.*
 
   utils-test:
@@ -68,6 +69,11 @@ jobs:
         with: { name: compiled-build, path: build }
       - name: Load Image
         run: docker load < idv-compiler.tar
-      - name: Run Test
+      - name: Run Utils1 Test
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=UtilsTest.*
+          chmod +x build/IDV
+          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=UtilsTest.utils1
+      - name: Run Utils2 Test
+        run: |
+          chmod +x build/IDV
+          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=UtilsTest.utils2
