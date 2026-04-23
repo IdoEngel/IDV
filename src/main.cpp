@@ -7,7 +7,7 @@ TEST(SampleTest, SampleAssertion) {
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
-    std::cout << "Hello, IDV!" << std::endl;
+    std::cout << "Hello, IDV!!" << std::endl;
 
     return RUN_ALL_TESTS();
 }
