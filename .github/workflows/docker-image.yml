@@ -2,21 +2,22 @@ name: Build and Test Compiler
 
 on:
   push:
-    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main", "develop" ]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - name: Build Docker
         run: docker build -t idv-compiler .
       - name: Save Image
         run: docker save idv-compiler > idv-compiler.tar
       - name: Upload Image Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: compiler-image
           path: idv-compiler.tar
@@ -25,9 +26,9 @@ jobs:
     needs: build-image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - name: Download Image
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v4
         with: { name: compiler-image }
       - name: Load Image
         run: docker load < idv-compiler.tar
@@ -35,7 +36,7 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler /bin/bash -c "mkdir -p build && cmake -B build -S . && cmake --build build"
       - name: Upload Compiled Binary
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: compiled-build
           path: build/
@@ -44,11 +45,11 @@ jobs:
     needs: compile-project 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - name: Download Image and Build
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v4
         with: { name: compiler-image }
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v4
         with: { name: compiled-build, path: build }
       - name: Load Image
         run: docker load < idv-compiler.tar
@@ -61,11 +62,11 @@ jobs:
     needs: init-test 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - name: Download Image and Build
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v4
         with: { name: compiler-image }
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v4
         with: { name: compiled-build, path: build }
       - name: Load Image
         run: docker load < idv-compiler.tar
