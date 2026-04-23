@@ -40,3 +40,30 @@ jobs:
             cmake --build build && 
             ./build/IDV --gtest_filter=InitTest.*
           "
+  init-test-branch1:
+    needs: init-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: compiler-image
+      - name: Load Image
+        run: docker load < idv-compiler.tar
+      - name: Run Init Test on Branch
+        run: ./build/IDV --gtest_filter=InitTest.*
+
+    init-test-branch2:
+    needs: init-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: compiler-image
+      - name: Load Image
+        run: docker load < idv-compiler.tar
+      - name: Run Init Test on Branch
+        run: ./build/IDV --gtest_filter=InitTest.*

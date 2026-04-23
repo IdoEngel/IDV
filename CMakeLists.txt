@@ -15,7 +15,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROC_NAME} 
-    src/main.cpp
+  src/main.cpp
+  header/Tests/Tests.hpp
+  src/Tests/Tests.cpp
 )
 
 target_link_libraries(${PROC_NAME} GTest::gtest)

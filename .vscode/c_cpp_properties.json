@@ -4,6 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/header/**",
                 "${workspaceFolder}/build/_deps/googletest-src/googletest/include"
             ],
             "configurationProvider": "ms-vscode.cmake-tools"
