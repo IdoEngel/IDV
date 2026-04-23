@@ -15,7 +15,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROC_NAME} 
-  src/Main.cpp
+  src/main.cpp
 
   header/Tests/Tests.hpp
   src/Tests/Tests.cpp
