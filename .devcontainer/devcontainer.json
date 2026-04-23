@@ -19,5 +19,5 @@
     },
     "runArgs": ["--init", "--privileged"],
     "remoteUser": "root",
-    "postCreateCommand": "mkdir -p OUTPUT COPY && cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build"
+    "postCreateCommand": "cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build"
 }
