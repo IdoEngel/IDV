@@ -38,9 +38,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Build Docker Image
-      run: docker build -t idv-compiler .
-
     - name: Run Unit Tests inside Container
       run: |
         docker run --rm idv-compiler /bin/bash -c "
@@ -50,5 +47,4 @@ jobs:
           cd build && 
           ctest --output-on-failure
         "
-    
-  
+      
