@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "(gdb) Launch Compiler",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/IDV",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Skip STL bits",
+                    "text": "skip -gfi /usr/include/c++/*/bits/*",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Skip C++ includes",
+                    "text": "skip -gfi /usr/include/c++/*",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Skip GCC runtime",
+                    "text": "skip -gfi /usr/lib/gcc/*/*",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build Compiler",
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ]
+}
