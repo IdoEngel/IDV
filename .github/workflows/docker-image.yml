@@ -72,8 +72,8 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=InitTest.*
 
-    init-test-branch3:
-    needs: init-test-branch3 
+  init-test-branch3:
+    needs: compile-project 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
