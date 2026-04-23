@@ -25,9 +25,18 @@ jobs:
     needs: build-image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
-        with: { name: compiler-image }
+      - uses: actions/checkout@v4
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: compiler-image
       - name: Load Image
         run: docker load < idv-compiler.tar
       - name: Run Init Test
-        run: docker run --rm idv-compiler /bin/bash -c "mkdir -p build && cmake -B build && cmake --build build && ./build/IDV --gtest_filter=InitTest.*"
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler /bin/bash -c "
+            mkdir -p build && 
+            cmake -B build -S . && 
+            cmake --build build && 
+            ./build/IDV --gtest_filter=InitTest.*
+          "
