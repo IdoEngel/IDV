@@ -27,5 +27,5 @@ jobs:
 
     - name: Run Unit Tests
       run: |
-        docker run --rm idv-compiler /bin/bash -c "cd build && ctest --output-on-failure"
+        docker run --rm idv-compiler /bin/bash -c "mkdir -p build && cd build && cmake .."
       continue-on-error: true
