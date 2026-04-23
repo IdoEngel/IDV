@@ -15,12 +15,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROC_NAME} 
-  src/main.cpp
+  src/Main.cpp
 
   header/Tests/Tests.hpp
   src/Tests/Tests.cpp
 
   header/Utils/Utils.hpp
+  src/Utils/Utils.cpp
 )
 
 target_link_libraries(${PROC_NAME} GTest::gtest)
