@@ -1,7 +1,6 @@
 #pragma once
 #include <gtest/gtest.h>
 
-#define InitTest InitTest
 
 namespace Tests {
 

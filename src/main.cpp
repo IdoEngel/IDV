@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../header/Tests/Tests.hpp"
+#include "../header/Utils/Utils.hpp"
 
 
 int main(int argc, char **argv) {

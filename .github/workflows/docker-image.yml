@@ -40,7 +40,7 @@ jobs:
           name: compiled-build
           path: build/
 
-  init-test-branch1:
+  init-test:
     needs: compile-project 
     runs-on: ubuntu-latest
     steps:
@@ -56,8 +56,8 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=InitTest.*
 
-  init-test-branch2:
-    needs: compile-project 
+  utils-test:
+    needs: init-test 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -70,20 +70,4 @@ jobs:
         run: docker load < idv-compiler.tar
       - name: Run Test
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=InitTest.*
-
-  init-test-branch3:
-    needs: init-test-branch1 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download Image and Build
-        uses: actions/download-artifact@v4
-        with: { name: compiler-image }
-      - uses: actions/download-artifact@v4
-        with: { name: compiled-build, path: build }
-      - name: Load Image
-        run: docker load < idv-compiler.tar
-      - name: Run Test
-        run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=InitTest.*
+          docker run --rm -v ${{ github.workspace }}:/app -w /app idv-compiler ./build/IDV --gtest_filter=UtilsTest.*
