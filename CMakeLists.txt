@@ -21,7 +21,7 @@ add_executable(${PROC_NAME}
   src/Tests/Tests.cpp
 
   header/Utils/Utils.hpp
-  src/Utils/Utils.cpp
+  src/Utils/Utils.cpp 
 )
 
 target_link_libraries(${PROC_NAME} GTest::gtest)
