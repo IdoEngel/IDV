@@ -17,11 +17,12 @@ FetchContent_MakeAvailable(googletest)
 add_executable(${PROC_NAME} 
   src/main.cpp
 
-  header/Tests/Tests.hpp
   src/Tests/Tests.cpp
 
-  header/Utils/Utils.hpp
-  src/Utils/Utils.cpp 
+  header/Utils/FileReader.hpp
+  src/Utils/FileReader.cpp
+
+  src/Utils/UtilsTests.cpp 
 )
 
 target_link_libraries(${PROC_NAME} GTest::gtest)
